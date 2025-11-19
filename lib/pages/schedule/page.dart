@@ -47,16 +47,35 @@ class _SchedulePageState extends State<SchedulePage> {
     );
   }
 
-  Future<void> _addSchedule() async {
-    final schedule = await showDialog<Schedule>(
-      context: context,
-      builder: (_) => const CreateScheduleDialog(),
-    );
+Future<void> _addSchedule() async {
+  final schedule = await showDialog<Schedule>(
+    context: context,
+    builder: (_) => const CreateScheduleDialog(),
+  );
 
-    if (schedule != null) {
-      setState(() => widget.group.addSchedule(schedule));
-    }
+  if (schedule == null) return;
+
+  try {
+    setState(() => widget.group.addSchedule(schedule));
+  } catch (e, stack) {
+
+    if (!mounted) { return; }
+
+    await showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("Error"),
+        content: Text("Failed to add schedule:\n$e"),
+        actions: [
+          TextButton(
+            child: const Text("OK"),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      ),
+    );
   }
+}
   
   Future<void> _modifySchedule(int index) async {
     final schedule = widget.group.schedules[index];
