@@ -1,9 +1,9 @@
 class Schedule {
-  final String title;
-  final DateTime start;
-  final DateTime end;
-  final String? description;
-  final String status;
+  String title;
+  DateTime start;
+  DateTime end;
+  String? description;
+  String status;
 
   Schedule({
     required this.title,
@@ -44,6 +44,25 @@ class ScheduleGroup {
   bool isOverlap(Schedule schedule) {
     var overlapping = schedules.any((x) => x.end.isAfter(schedule.start) && x.start.isBefore(schedule.end));
     return overlapping;
+  }
+
+  ScheduleGroup copyWith({
+    String? name,
+    bool? allowOverlap,
+    List<Schedule>? schedules,
+  }) {
+    return ScheduleGroup(
+      name: name ?? this.name,
+      allowOverlap: allowOverlap ?? this.allowOverlap,
+      schedules: schedules ?? this.schedules,
+    );
+  }
+
+  void addSchedule(Schedule schedule) {
+    if (!allowOverlap && isOverlap(schedule)) {
+      throw Exception("Schedule overlaps with existing schedules");
+    }
+    schedules.add(schedule);
   }
 }
 
