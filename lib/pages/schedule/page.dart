@@ -57,7 +57,7 @@ Future<void> _addSchedule() async {
 
   try {
     setState(() => widget.group.addSchedule(schedule));
-  } catch (e, stack) {
+  } catch (e) {
 
     if (!mounted) { return; }
 
