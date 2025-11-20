@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+
+// Dialog untuk mengganti nama group schedule
 class RenameGroupDialog extends StatefulWidget {
   final String currentName;
   const RenameGroupDialog({super.key, required this.currentName});

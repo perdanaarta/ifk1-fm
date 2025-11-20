@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:learn_flutter/models/schedule.dart';
 
+// Widget untuk menampilkan card dari sebuah schedule group
 class GroupCard extends StatelessWidget {
   final ScheduleGroup group;
 

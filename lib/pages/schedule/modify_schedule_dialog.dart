@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:learn_flutter/models/schedule.dart';
+import 'package:learn_flutter/schedule_utils.dart';
 
+
+// Dialog untuk memodifikasi schedule
 class ModifyScheduleDialog extends StatefulWidget {
   final Schedule schedule;
 
@@ -10,6 +13,8 @@ class ModifyScheduleDialog extends StatefulWidget {
   State<ModifyScheduleDialog> createState() => _ModifyScheduleDialogState();
 }
 
+
+// State class untuk ModifyScheduleDialog
 class _ModifyScheduleDialogState extends State<ModifyScheduleDialog> {
   late TextEditingController _titleController;
   late TextEditingController _descController;
@@ -26,35 +31,23 @@ class _ModifyScheduleDialogState extends State<ModifyScheduleDialog> {
     _end = widget.schedule.end;
   }
 
-  Future<void> _pickTime(bool pickingStart) async {
-    final initial = pickingStart 
-        ? TimeOfDay(hour: _start.hour, minute: _start.minute)
-        : TimeOfDay(hour: _end.hour, minute: _end.minute);
 
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: initial,
-    );
+  Future<void> _pickStartTime() async {
+    final dt = (await ScheduleUtils.pickTime(context, initial: _start));
+    if (dt == null) return;
 
-    if (picked == null) return;
-
-    final now = DateTime.now();
-    final result = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      picked.hour,
-      picked.minute,
-    );
-
-    setState(() {
-      if (pickingStart) {
-        _start = result;
-      } else {
-        _end = result;
-      }
-    });
+    _start = dt;
+    setState(() {});
   }
+
+  Future<void> _pickEndTime() async {
+    final dt = (await ScheduleUtils.pickTime(context, initial: _end));
+    if (dt == null) return;
+
+    _end = dt;
+    setState(() {});
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -74,16 +67,16 @@ class _ModifyScheduleDialogState extends State<ModifyScheduleDialog> {
             contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.access_time),
             title: const Text("Start"),
-            subtitle: Text(_format(_start)),
-            onTap: () => _pickTime(true),
+            subtitle: Text(ScheduleUtils.formatTime(_start)),
+            onTap: () => _pickStartTime(),
           ),
 
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.schedule),
             title: const Text("End"),
-            subtitle: Text(_format(_end)),
-            onTap: () => _pickTime(false),
+            subtitle: Text(ScheduleUtils.formatTime(_end)),
+            onTap: () => _pickEndTime(),
           ),
 
           const SizedBox(height: 16),
@@ -134,12 +127,5 @@ class _ModifyScheduleDialogState extends State<ModifyScheduleDialog> {
         )
       ],
     );
-  }
-
-  String _format(DateTime t) {
-    final hour = t.hour % 12 == 0 ? 12 : t.hour % 12;
-    final minute = t.minute.toString().padLeft(2, '0');
-    final ampm = t.hour >= 12 ? 'PM' : 'AM';
-    return "$hour:$minute $ampm";
   }
 }

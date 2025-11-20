@@ -5,6 +5,8 @@ import 'package:learn_flutter/pages/schedule_group/create_group_dialog.dart';
 import 'package:learn_flutter/pages/schedule_group/group_card.dart';
 import 'package:learn_flutter/pages/schedule_group/rename_group_dialog.dart';
 
+
+// Halaman untuk menampilkan daftar GroupCard
 class GroupPage extends StatefulWidget {
   final List<ScheduleGroup> groups;
   const GroupPage({super.key, required this.groups});
@@ -13,6 +15,7 @@ class GroupPage extends StatefulWidget {
   State<StatefulWidget> createState() => _GroupPageState();
 }
 
+// State class untuk GroupPage
 class _GroupPageState extends State<GroupPage> {
   @override
   Widget build(BuildContext context) {

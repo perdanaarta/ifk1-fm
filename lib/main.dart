@@ -4,6 +4,8 @@ import 'package:learn_flutter/pages/schedule_group/page.dart';
 
 void main() => runApp(const MyApp());
 
+
+// Entry point aplikasi
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

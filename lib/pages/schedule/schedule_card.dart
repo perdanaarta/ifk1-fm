@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:learn_flutter/models/schedule.dart';
 import 'package:intl/intl.dart';
 
+// Widget untuk menformat data ke dalam bentuk card
 class ScheduleCard extends StatelessWidget {
   final Schedule card;
 
@@ -72,6 +73,7 @@ class ScheduleCard extends StatelessWidget {
   }
 }
 
+// Widget popup untuk menampilkan aksi pada ScheduleCard
 class ScheduleCardActions extends StatelessWidget {
   final VoidCallback onDelete;
   final VoidCallback onAdd;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learn_flutter/models/schedule.dart';
 
+// Dialog untuk membuat group schedule baru
 class CreateGroupDialog extends StatefulWidget {
   const CreateGroupDialog({super.key});
 
@@ -8,6 +9,7 @@ class CreateGroupDialog extends StatefulWidget {
   State<CreateGroupDialog> createState() => _CreateGroupDialogState();
 }
 
+// State class untuk CreateGroupDialog
 class _CreateGroupDialogState extends State<CreateGroupDialog> {
   final _nameController = TextEditingController();
   bool _allowOverlap = true;

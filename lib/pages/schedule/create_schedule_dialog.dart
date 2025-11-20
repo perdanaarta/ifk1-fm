@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:learn_flutter/models/schedule.dart';
+import 'package:learn_flutter/schedule_utils.dart';
 
+
+// Dialog untuk membuat schedule baru
 class CreateScheduleDialog extends StatefulWidget {
   const CreateScheduleDialog({super.key});
 
@@ -8,6 +11,7 @@ class CreateScheduleDialog extends StatefulWidget {
   State<CreateScheduleDialog> createState() => _CreateScheduleDialogState();
 }
 
+// State class untuk CreateScheduleDialog
 class _CreateScheduleDialogState extends State<CreateScheduleDialog> {
   final _titleController = TextEditingController();
   final _descController = TextEditingController();
@@ -16,32 +20,21 @@ class _CreateScheduleDialogState extends State<CreateScheduleDialog> {
   DateTime? _end;
 
   Future<void> _pickStartTime() async {
-    final time = await showTimePicker(
-      context: context,
-      initialTime: const TimeOfDay(hour: 8, minute: 0),
-    );
+    final dt = (await ScheduleUtils.pickTime(context, initial: _start));
+    if (dt == null) return;
 
-    if (time == null) return;
-
-    final now = DateTime.now();
-    setState(() {
-      _start = DateTime(now.year, now.month, now.day, time.hour, time.minute);
-    });
+    _start = dt;
+    setState(() {});
   }
 
   Future<void> _pickEndTime() async {
-    final time = await showTimePicker(
-      context: context,
-      initialTime: const TimeOfDay(hour: 9, minute: 0),
-    );
+    final dt = (await ScheduleUtils.pickTime(context, initial: _end));
+    if (dt == null) return;
 
-    if (time == null) return;
-
-    final now = DateTime.now();
-    setState(() {
-      _end = DateTime(now.year, now.month, now.day, time.hour, time.minute);
-    });
+    _end = dt;
+    setState(() {});
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +55,7 @@ class _CreateScheduleDialogState extends State<CreateScheduleDialog> {
             title: const Text("Start Time"),
             subtitle: Text(_start == null
                 ? "Pick start time"
-                : _format(_start!)),
+                : ScheduleUtils.formatTime(_start!)),
             onTap: _pickStartTime,
           ),
 
@@ -72,7 +65,7 @@ class _CreateScheduleDialogState extends State<CreateScheduleDialog> {
             title: const Text("End Time"),
             subtitle: Text(_end == null
                 ? "Pick end time"
-                : _format(_end!)),
+                : ScheduleUtils.formatTime(_end!)),
             onTap: _pickEndTime,
           ),
 
@@ -80,11 +73,11 @@ class _CreateScheduleDialogState extends State<CreateScheduleDialog> {
 
           TextField(
             controller: _descController,
+            maxLines: 2,
             decoration: const InputDecoration(
               labelText: "Description (optional)",
               border: OutlineInputBorder(),
             ),
-            maxLines: 2,
           ),
         ],
       ),
@@ -126,12 +119,6 @@ class _CreateScheduleDialogState extends State<CreateScheduleDialog> {
         ),
       ],
     );
-  }
-
-  String _format(DateTime time) {
-    final hour = time.hour % 12 == 0 ? 12 : time.hour % 12;
-    final minute = time.minute.toString().padLeft(2, '0');
-    final ampm = time.hour >= 12 ? 'PM' : 'AM';
-    return "$hour:$minute $ampm";
+    
   }
 }

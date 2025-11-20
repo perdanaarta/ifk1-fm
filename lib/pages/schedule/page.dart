@@ -4,6 +4,7 @@ import 'package:learn_flutter/pages/schedule/create_schedule_dialog.dart';
 import 'package:learn_flutter/pages/schedule/modify_schedule_dialog.dart';
 import 'package:learn_flutter/pages/schedule/schedule_card.dart';
 
+// Halaman untuk menampilkan daftar ScheduleCard dalam sebuah group
 class SchedulePage extends StatefulWidget {
   final ScheduleGroup group;
   const SchedulePage({super.key, required this.group});
@@ -12,6 +13,7 @@ class SchedulePage extends StatefulWidget {
   State<SchedulePage> createState() => _SchedulePageState();
 }
 
+// State class untuk SchedulePage
 class _SchedulePageState extends State<SchedulePage> {
 
   @override
@@ -47,35 +49,35 @@ class _SchedulePageState extends State<SchedulePage> {
     );
   }
 
-Future<void> _addSchedule() async {
-  final schedule = await showDialog<Schedule>(
-    context: context,
-    builder: (_) => const CreateScheduleDialog(),
-  );
-
-  if (schedule == null) return;
-
-  try {
-    setState(() => widget.group.addSchedule(schedule));
-  } catch (e) {
-
-    if (!mounted) { return; }
-
-    await showDialog(
+  Future<void> _addSchedule() async {
+    final schedule = await showDialog<Schedule>(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("Error"),
-        content: Text("Failed to add schedule:\n$e"),
-        actions: [
-          TextButton(
-            child: const Text("OK"),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ],
-      ),
+      builder: (_) => const CreateScheduleDialog(),
     );
+
+    if (schedule == null) return;
+
+    try {
+      setState(() => widget.group.addSchedule(schedule));
+    } catch (e) {
+
+      if (!mounted) { return; }
+
+      await showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text("Error"),
+          content: Text("Failed to add schedule:\n$e"),
+          actions: [
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+      );
+    }
   }
-}
   
   Future<void> _modifySchedule(int index) async {
     final schedule = widget.group.schedules[index];
